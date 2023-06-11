@@ -1,5 +1,6 @@
 import React from 'react';
 import {FilterValuesType} from "./App";
+import {SuperButton} from "./components/SuperButton";
 
 type TodolistPropsType = {
     title: string
@@ -36,9 +37,9 @@ export const Todolist = (props: TodolistPropsType) => {
                 {mappedTasks}
             </ul>
             <div className="buttons">
-                <button onClick={() => props.changeFilter('all')}>All</button>
-                <button onClick={() => props.changeFilter('active')}>Active</button>
-                <button onClick={() => props.changeFilter('completed')}>Completed</button>
+                <SuperButton callBack={() => props.changeFilter('all')}>All</SuperButton>
+                <SuperButton callBack={() => props.changeFilter('active')}>Active</SuperButton>
+                <SuperButton callBack={() => props.changeFilter('completed')}>Completed</SuperButton>
             </div>
         </div>
     );

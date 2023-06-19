@@ -8,17 +8,4 @@
     margin-right: 50px;
 }
 
-.todolist {
-    background-color: #d4b8ec;
-    padding: 20px;
-    border: 2px solid #7a589d;
-    border-radius: 5px;
-}
 
-.items {
-    list-style-type: none;
-}
-
-.buttons{
-    margin-left: 20px;
-}

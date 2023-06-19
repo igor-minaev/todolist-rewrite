@@ -8,4 +8,9 @@
     margin-right: 50px;
 }
 
-
+.todolist{
+    background-color: #6eb9bb;
+    border: 2px solid #224b4b;
+    padding: 10px;
+    border-radius: 5px;
+}

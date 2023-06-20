@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {FilterValuesType} from "./App";
 
 type TodolistPropsType = {
@@ -6,6 +6,7 @@ type TodolistPropsType = {
     tasks: TaskType[]
     removeTask: (taskId: string) => void
     changeFilter: (filter: FilterValuesType) => void
+    addTask: (title: string) => void
 }
 
 export type TaskType = {
@@ -27,12 +28,22 @@ export const Todolist = (props: TodolistPropsType) => {
             )
         })
         : <span>Tasks list is empty!</span>
+
+    const inputRef = useRef<HTMLInputElement>(null)
+
+    const addTaskHandler = () => {
+        if (inputRef.current) {
+            props.addTask(inputRef.current.value)
+            inputRef.current.value = ''
+        }
+    }
+
     return (
         <div className="todolist">
             <h3>{props.title}</h3>
             <div>
-                <input/>
-                <button>+</button>
+                <input ref={inputRef}/>
+                <button onClick={addTaskHandler}>+</button>
             </div>
             <ul className='items'>
                 {tasksList}

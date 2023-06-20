@@ -21,6 +21,11 @@ function App() {
         setTasks(tasks.filter(task => task.id !== taskId))
     }
 
+    const addTask = (title: string) => {
+        const newTask: TaskType = {id: v1(), title, isDone: false}
+        setTasks([newTask, ...tasks])
+    }
+
     const changeFilter = (filter: FilterValuesType) => {
         setFilter(filter)
     }
@@ -46,7 +51,8 @@ function App() {
                 title={todolistTitle}
                 tasks={filteredTasks}
                 removeTask={removeTask}
-                changeFilter={changeFilter}/>
+                changeFilter={changeFilter}
+                addTask={addTask}/>
         </div>
     );
 }

@@ -8,9 +8,23 @@
     margin-right: 50px;
 }
 
-.todolist{
+.todolist {
     background-color: #6eb9bb;
     border: 2px solid #224b4b;
     padding: 10px;
     border-radius: 5px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+.task{
+    display: flex;
+    justify-content: space-between;
+}
+
+.sort{
+    text-align: center;
 }

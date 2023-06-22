@@ -3,11 +3,14 @@ import {FilterValuesType, SortValuesType} from "./App";
 
 type TodolistPropsType = {
     title: string
+    filter: FilterValuesType
+    sortValue: SortValuesType
     tasks: TaskType[]
     removeTask: (taskId: string) => void
     changeFilter: (filter: FilterValuesType) => void
     addTask: (title: string) => void
     changeSortValue: (sortValue: SortValuesType) => void
+    changeTaskStatus: (taskId: string, status: boolean) => void
 }
 
 export type TaskType = {
@@ -18,14 +21,18 @@ export type TaskType = {
 
 export const Todolist = (props: TodolistPropsType) => {
     const [title, setTitle] = useState<string>('')
+    const [error, setError] = useState<boolean>(false)
     const tasksList = props.tasks.length
         ? props.tasks.map(task => {
             const removeTaskHandler = () => props.removeTask(task.id)
+            const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(task.id, e.currentTarget.checked)
+            const taskClasses = task.isDone ? "task-completed" : ''
             return (
                 <li key={task.id} className="task">
                     <div>
-                        <input type="checkbox" checked={task.isDone}/>
-                        <span>{task.title}</span>
+                        <input type="checkbox" checked={task.isDone}
+                               onChange={onChangeHandler}/>
+                        <span className={taskClasses}>{task.title}</span>
                     </div>
                     <button onClick={removeTaskHandler}>x</button>
                 </li>
@@ -44,11 +51,21 @@ export const Todolist = (props: TodolistPropsType) => {
     // }
 
     const addTaskHandler = () => {
-        props.addTask(title)
+        const trimmedTitle = title.trim()
+        if (trimmedTitle !== '') {
+            props.addTask(title)
+        } else {
+            setError(true)
+        }
         setTitle('')
     }
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        if (error) {
+            setError(false)
+        }
+        setTitle(e.currentTarget.value)
+    }
 
     const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && addTaskHandler()
 
@@ -60,30 +77,42 @@ export const Todolist = (props: TodolistPropsType) => {
     const isTitleToLong = title.length > titleMaxLength
     const isDisableButton = !title.length || isTitleToLong
     const isTitleToLongWarning = isTitleToLong ? <div style={{color: 'red'}}>Title is too long!</div> : null
+    const inputClasses = error || isTitleToLong ? "error" : ''
+    const errorMessage = error ? <div className="error-message">Title is rquired!</div> : null
 
     return (
         <div className="todolist">
             <h3>{props.title}</h3>
             <div>
                 {/*<input ref={inputRef}/>*/}
-                <input value={title} onChange={onChangeHandler} onKeyDown={onKeyDownHandler}/>
+                <input value={title} onChange={onChangeHandler} onKeyDown={onKeyDownHandler} className={inputClasses}/>
                 <button disabled={isDisableButton} onClick={addTaskHandler}>+</button>
-                {isTitleToLongWarning}
+                {isTitleToLongWarning || errorMessage}
             </div>
             <div className="sort">
                 <span style={{marginRight: '5px'}}>Sorting by alphabet</span>
-                <div>
-                    <button onClick={changeSortValueHandlerCreator("A-Z")}>A-Z</button>
-                    <button onClick={changeSortValueHandlerCreator("Z-A")}>Z-A</button>
+                <div className="buttons">
+                    <button className={props.sortValue === "A-Z" ? 'active-button' : ''}
+                            onClick={changeSortValueHandlerCreator("A-Z")}>A-Z
+                    </button>
+                    <button className={props.sortValue === "Z-A" ? 'active-button' : ''}
+                            onClick={changeSortValueHandlerCreator("Z-A")}>Z-A
+                    </button>
                 </div>
             </div>
             <ul className='items'>
                 {tasksList}
             </ul>
             <div className="buttons">
-                <button onClick={changeFilterHandlerCreator("all")}>All</button>
-                <button onClick={changeFilterHandlerCreator("active")}>Active</button>
-                <button onClick={changeFilterHandlerCreator("completed")}>Completed</button>
+                <button className={props.filter === "all" ? 'active-button' : ''}
+                        onClick={changeFilterHandlerCreator("all")}>All
+                </button>
+                <button className={props.filter === "active" ? 'active-button' : ''}
+                        onClick={changeFilterHandlerCreator("active")}>Active
+                </button>
+                <button className={props.filter === "completed" ? 'active-button' : ''}
+                        onClick={changeFilterHandlerCreator("completed")}>Completed
+                </button>
             </div>
         </div>
     );

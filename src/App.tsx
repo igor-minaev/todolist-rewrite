@@ -39,6 +39,10 @@ function App() {
         setSortValue(sortValue)
     }
 
+    const changeTaskStatus = (taskId: string, status: boolean) => {
+        setTasks(tasks.map(task => task.id === taskId ? {...task, isDone: status} : task))
+    }
+
     const getFilteredTasks = (tasks: TaskType[], filter: FilterValuesType): TaskType[] => {
         switch (filter) {
             case "active":
@@ -72,11 +76,14 @@ function App() {
         <div className="App">
             <Todolist
                 title={todolistTitle}
+                filter={filter}
+                sortValue={sortValue}
                 tasks={sortedTasks}
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
-                changeSortValue={changeSortValue}/>
+                changeSortValue={changeSortValue}
+                changeTaskStatus={changeTaskStatus}/>
         </div>
     );
 }
